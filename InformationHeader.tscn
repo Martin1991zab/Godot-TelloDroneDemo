@@ -1,0 +1,305 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://assets/bat_progress.png" type="Texture" id=1]
+[ext_resource path="res://assets/temp_under.png" type="Texture" id=2]
+[ext_resource path="res://AxesCircle.tscn" type="PackedScene" id=3]
+[ext_resource path="res://TimeBars.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/temp_progress.png" type="Texture" id=5]
+[ext_resource path="res://assets/bat_under.png" type="Texture" id=6]
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends MarginContainer
+
+
+func update_bat(val: int) -> void:
+    ($VBoxContainer/HBoxContainer/GridContainer/BatteryBar as TextureProgress).value = val
+    ($VBoxContainer/HBoxContainer/GridContainer/BatteryVal as Label).text = String(val) + \" %\"
+
+
+func update_yaw(val: int) -> void:
+    $VBoxContainer/HBoxContainer/MarginContainer/AxesCircle.yaw = val
+
+
+func update_roll(val: int) -> void:
+    $VBoxContainer/HBoxContainer/MarginContainer/AxesCircle.roll = val
+
+
+func update_pitch(val: int) -> void:
+    $VBoxContainer/HBoxContainer/MarginContainer/AxesCircle.pitch = val
+
+
+func update_temph(val: int) -> void:
+    ($VBoxContainer/HBoxContainer/GridContainer/TemperaturHighBar as TextureProgress).value = val
+    ($VBoxContainer/HBoxContainer/GridContainer/TemperaturHighVal as Label).text = String(val) + \" °C\"
+
+
+func update_templ(val: int) -> void:
+    ($VBoxContainer/HBoxContainer/GridContainer/TemperaturLowBar as TextureProgress).value = val
+    ($VBoxContainer/HBoxContainer/GridContainer/TemperaturLowVal as Label).text = String(val) + \" °C\"
+
+
+func update_hight(val: int) -> void:
+    ($VBoxContainer/HBoxContainer2/HightSlider as HSlider).value = val
+    ($VBoxContainer/HBoxContainer2/HightVal as Label).text = String(val) + \" cm\"
+
+
+func update_time(val: int) -> void:
+    $VBoxContainer/HBoxContainer/GridContainer/TimeBars.time = val
+    var t := 0
+    while val >= 60:
+        t += 1
+        val -= 60
+    ($VBoxContainer/HBoxContainer/GridContainer/FlightTimeVal as Label).text = \"{m}m {s}sec\".format({\"m\": t, \"s\": val})
+
+
+func update_status(val: String) -> void:
+    ($VBoxContainer/HBoxContainer/GridContainer/StatusVal as Label).text = val
+
+
+func update_hight_tof(val: int) -> void:
+    ($VBoxContainer/HBoxContainer3/TofSlider as HSlider).value = val
+    ($VBoxContainer/HBoxContainer3/TofVal as Label).text = String(val) + \" cm\"
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends VBoxContainer
+
+export(int) var time : int = 0 setget set_time
+
+func set_time(val: int) -> void:
+    ($Minuets as TextureProgress).value = val
+    while val >= 60:
+        val -= 60
+    ($Seconds as TextureProgress).value = val
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Node2D
+
+export(int) var yaw: int = 0 setget set_yaw
+export(int) var roll: int = 0 setget set_roll
+export(int) var pitch: int = 0 setget set_pitch
+
+func set_yaw(val: int) -> void:
+    ($Yaw as Sprite).rotation_degrees = val
+
+func set_roll(val: int) -> void:
+    ($Roll as HSlider).value = val
+
+func set_pitch(val: int) -> void:
+    ($Pitch as VSlider).value = val
+"
+
+[node name="InformationsHeader" type="MarginContainer"]
+anchor_right = 1.0
+margin_bottom = 205.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+script = SubResource( 4 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 795.0
+margin_bottom = 225.0
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 790.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+
+[node name="HightLbl" type="Label" parent="VBoxContainer/HBoxContainer2"]
+margin_top = 1.0
+margin_right = 101.0
+margin_bottom = 15.0
+text = "Hight from Start"
+
+[node name="HightSlider" type="HSlider" parent="VBoxContainer/HBoxContainer2"]
+margin_left = 105.0
+margin_right = 754.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+max_value = 1000.0
+
+[node name="HightVal" type="Label" parent="VBoxContainer/HBoxContainer2"]
+margin_left = 758.0
+margin_top = 1.0
+margin_right = 790.0
+margin_bottom = 15.0
+text = "0 cm"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 20.0
+margin_right = 790.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+
+[node name="TofLbl" type="Label" parent="VBoxContainer/HBoxContainer3"]
+margin_top = 1.0
+margin_right = 101.0
+margin_bottom = 15.0
+text = "Hight from TOF "
+
+[node name="TofSlider" type="HSlider" parent="VBoxContainer/HBoxContainer3"]
+margin_left = 105.0
+margin_right = 754.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+max_value = 1000.0
+
+[node name="TofVal" type="Label" parent="VBoxContainer/HBoxContainer3"]
+margin_left = 758.0
+margin_top = 1.0
+margin_right = 790.0
+margin_bottom = 15.0
+text = "0 cm"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 40.0
+margin_right = 790.0
+margin_bottom = 220.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer"]
+margin_right = 502.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+columns = 3
+
+[node name="BatteryLbl" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_top = 1.0
+margin_right = 107.0
+margin_bottom = 15.0
+text = "Battery"
+
+[node name="BatteryBar" type="TextureProgress" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_left = 111.0
+margin_right = 443.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+texture_under = ExtResource( 6 )
+texture_progress = ExtResource( 1 )
+nine_patch_stretch = true
+stretch_margin_left = 8
+stretch_margin_top = 8
+stretch_margin_right = 8
+stretch_margin_bottom = 8
+
+[node name="BatteryVal" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_left = 447.0
+margin_top = 1.0
+margin_right = 502.0
+margin_bottom = 15.0
+text = "0 %"
+
+[node name="TemperaturHighLbl" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_top = 21.0
+margin_right = 107.0
+margin_bottom = 35.0
+text = "Temperatur High"
+
+[node name="TemperaturHighBar" type="TextureProgress" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_left = 111.0
+margin_top = 20.0
+margin_right = 443.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+rounded = true
+texture_under = ExtResource( 2 )
+texture_progress = ExtResource( 5 )
+nine_patch_stretch = true
+stretch_margin_left = 8
+stretch_margin_top = 8
+stretch_margin_right = 8
+stretch_margin_bottom = 8
+
+[node name="TemperaturHighVal" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_left = 447.0
+margin_top = 21.0
+margin_right = 502.0
+margin_bottom = 35.0
+text = "0 °C"
+
+[node name="TemperaturLowLbl" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_top = 41.0
+margin_right = 107.0
+margin_bottom = 55.0
+text = "Temperatur Low"
+
+[node name="TemperaturLowBar" type="TextureProgress" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_left = 111.0
+margin_top = 40.0
+margin_right = 443.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+texture_under = ExtResource( 2 )
+texture_progress = ExtResource( 5 )
+nine_patch_stretch = true
+stretch_margin_left = 8
+stretch_margin_top = 8
+stretch_margin_right = 8
+stretch_margin_bottom = 8
+
+[node name="TemperaturLowVal" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_left = 447.0
+margin_top = 41.0
+margin_right = 502.0
+margin_bottom = 55.0
+text = "0 °C"
+
+[node name="FlightTimeLbl" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_top = 66.0
+margin_right = 107.0
+margin_bottom = 80.0
+text = "Flight Time"
+
+[node name="TimeBars" parent="VBoxContainer/HBoxContainer/GridContainer" instance=ExtResource( 4 )]
+margin_left = 111.0
+margin_top = 60.0
+margin_right = 443.0
+margin_bottom = 87.0
+script = SubResource( 5 )
+
+[node name="FlightTimeVal" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_left = 447.0
+margin_top = 66.0
+margin_right = 502.0
+margin_bottom = 80.0
+text = "0m 0sec"
+
+[node name="StatusLbl" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_top = 91.0
+margin_right = 107.0
+margin_bottom = 105.0
+text = "Status"
+
+[node name="StatusVal" type="Label" parent="VBoxContainer/HBoxContainer/GridContainer"]
+margin_left = 111.0
+margin_top = 91.0
+margin_right = 443.0
+margin_bottom = 105.0
+text = "nothing happend ..."
+
+[node name="Nothing" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+margin_left = 506.0
+margin_right = 606.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 100, 0 )
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+margin_left = 610.0
+margin_right = 790.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 180, 180 )
+
+[node name="AxesCircle" parent="VBoxContainer/HBoxContainer/MarginContainer" instance=ExtResource( 3 )]
+position = Vector2( 80, 90 )
+script = SubResource( 3 )

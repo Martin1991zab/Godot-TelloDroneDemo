@@ -1,0 +1,420 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://addons/TelloDroneNode/TelloDroneNode.gd" type="Script" id=1]
+[ext_resource path="res://InformationHeader.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ClickController.tscn" type="PackedScene" id=3]
+[ext_resource path="res://WaitAnimation.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/Kenney Future.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+onready var _tello := $Tello as Tello
+
+
+var _speed := 100
+var _distance := 20
+var _turn_angle := 1
+var _rc_mode := false setget update_rc_mode
+var _rc_mode_started := false
+
+
+func _ready() -> void:
+    $Start.visible = true
+
+
+func _process(_delta: float) -> void:
+    if !_rc_mode:
+        return
+    if Input.is_action_just_pressed(\"emergency\"):
+        _tello.emergency()
+        _rc_mode = false
+        _rc_mode_started = false
+        $DebugStuff/Box/Box/RC.pressed = false
+        return
+    if Input.is_action_just_pressed(\"takeoff\"):
+        _tello.takeoff()
+        _rc_mode_started = true
+        return
+    if Input.is_action_just_pressed(\"land\"):
+        _tello.land()
+        _rc_mode = false
+        _rc_mode_started = false
+        $DebugStuff/Box/Box/RC.pressed = false
+        return
+    _handle_rc_control()
+
+
+func _handle_rc_control() -> void:
+    if !_rc_mode_started:
+        return
+    var forward_backward := _input_forward_back()
+    var left_right := _input_left_right()
+    var yaw := _input_turn_left_right()
+    var up_down := _input_up_down()
+    _tello.rc(left_right * _speed, forward_backward * _speed, up_down * _speed, yaw * _speed)
+
+
+func _input_up_down() -> int:
+    var up_down := 0
+    if Input.is_action_pressed(\"up\"):
+        up_down += 1
+    if Input.is_action_pressed(\"down\"):
+        up_down += -1
+    return up_down
+
+
+func _input_turn_left_right() -> int:
+    var yaw := 0
+    if Input.is_action_pressed(\"turn_left\"):
+        yaw += -1
+    if Input.is_action_pressed(\"turn_right\"):
+        yaw += 1
+    return yaw
+
+
+func _input_left_right() -> int:
+    var left_right := 0
+    if Input.is_action_pressed(\"left\"):
+        left_right += -1
+    if Input.is_action_pressed(\"right\"):
+        left_right += 1
+    return left_right
+
+
+func _input_forward_back() -> int:
+    var forward_backward := 0
+    if Input.is_action_pressed(\"forward\"):
+        forward_backward += 1
+    if Input.is_action_pressed(\"back\"):
+        forward_backward += -1
+    return forward_backward
+
+
+func update_rc_mode(val: bool) -> void:
+    _rc_mode = val
+
+
+func _on_Send_pressed() -> void:
+    var cmd : String = ($DebugStuff/Box/Box/HBoxContainer/CmdTxt as LineEdit).text
+    if cmd.length() == 0:
+        return
+    _tello.send_cmd(cmd)
+
+
+func _on_Tello_recived_control_code(val) -> void:
+    $Header.update_status(_tello.last_command + \": \" + val)
+
+
+func _on_Tello_command_send(cmd) -> void:
+    $Header.update_status(cmd + \": ?\")
+
+
+func _on_CheckBox_toggled(button_pressed: bool) -> void:
+    if button_pressed:
+        ($DebugStuff as MarginContainer).rect_position.x = 5
+    else:
+        ($DebugStuff as MarginContainer).rect_position.x = -182
+
+
+func _on_ClickController_speed_changed(val) -> void:
+    _speed = val
+    _tello.speed(val)
+
+
+func _on_ClickController_distance_changed(val) -> void:
+    _distance = val
+
+
+func _on_ClickController_angle_changed(val) -> void:
+    _turn_angle = val
+
+
+func _on_TurnLeft_pressed() -> void:
+    _tello.ccw(_turn_angle)
+
+
+func _on_TurnRight_pressed() -> void:
+    _tello.cw(_turn_angle)
+
+
+func _on_Up_pressed() -> void:
+    _tello.up(_distance)
+
+
+func _on_Forward_pressed() -> void:
+    _tello.forward(_distance)
+
+
+func _on_Left_pressed() -> void:
+    _tello.left(_distance)
+
+
+func _on_Right_pressed() -> void:
+    _tello.right(_distance)
+
+
+func _on_Backward_pressed() -> void:
+    _tello.back(_distance)
+
+
+func _on_Liftoff_pressed() -> void:
+    _tello.takeoff()
+    _rc_mode_started = true
+
+
+func _on_Land_pressed() -> void:
+    _tello.land()
+    _rc_mode_started = false
+
+
+func _on_Down_pressed() -> void:
+    _tello.down(_distance)
+
+
+func _on_ForwardLeft_pressed() -> void:
+    _tello.go(_distance, _distance, 0, _speed)
+
+
+func _on_ForwardRight_pressed() -> void:
+    _tello.go(_distance, -_distance, 0, _speed)
+
+
+func _on_BackwardLeft_pressed() -> void:
+    _tello.go(-_distance, _distance, 0, _speed)
+
+
+func _on_BackwardRight_pressed() -> void:
+    _tello.go(-_distance, -_distance, 0, _speed)
+
+
+func _on_EmergencyOff_pressed() -> void:
+    _tello.emergency()
+    _rc_mode_started = false
+
+
+func _on_start_pressed() -> void:
+    $Start/CenterContainer/Welcome.visible = false
+    $Start/CenterContainer/WaitAnimation.visible = true
+    $Start/CenterContainer/WaitAnimation.play = true
+    _tello.start()
+    yield(_tello, \"recived_control_code_ok\")
+    $Start/CenterContainer/WaitAnimation.play = false
+    $Start.visible = false
+"
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 5 )
+
+[node name="Main" type="Node"]
+script = SubResource( 1 )
+
+[node name="Tello" type="Node" parent="."]
+script = ExtResource( 1 )
+keep_active_time = 5.0
+
+[node name="DebugStuff" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = -181.0
+margin_top = -100.0
+margin_right = 29.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Box" type="HBoxContainer" parent="DebugStuff"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 205.0
+margin_bottom = 95.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Box" type="VBoxContainer" parent="DebugStuff/Box"]
+margin_right = 172.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+custom_constants/separation = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="DebugStuff/Box/Box"]
+margin_right = 172.0
+margin_bottom = 14.0
+text = "Send Command"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DebugStuff/Box/Box"]
+margin_top = 20.0
+margin_right = 172.0
+margin_bottom = 44.0
+size_flags_vertical = 0
+
+[node name="CmdTxt" type="LineEdit" parent="DebugStuff/Box/Box/HBoxContainer"]
+margin_right = 125.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+caret_blink = true
+caret_blink_speed = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Send" type="Button" parent="DebugStuff/Box/Box/HBoxContainer"]
+margin_left = 129.0
+margin_right = 172.0
+margin_bottom = 24.0
+text = "Send"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RC" type="CheckButton" parent="DebugStuff/Box/Box"]
+margin_top = 50.0
+margin_right = 172.0
+margin_bottom = 90.0
+text = "RC Mode"
+
+[node name="CheckBox" type="CheckBox" parent="DebugStuff/Box"]
+margin_left = 176.0
+margin_top = 66.0
+margin_right = 200.0
+margin_bottom = 90.0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+align = 2
+
+[node name="Header" parent="." instance=ExtResource( 2 )]
+margin_left = -1.10803
+margin_top = 1.10803
+margin_right = -1.10803
+margin_bottom = 206.108
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -193.0
+margin_right = 193.0
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Nothing" type="MarginContainer" parent="VBoxContainer"]
+margin_right = 386.0
+margin_bottom = 222.0
+size_flags_vertical = 3
+
+[node name="ClickController" parent="VBoxContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 226.0
+margin_right = 386.0
+margin_bottom = 600.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="VBoxContainer" parent="VBoxContainer/ClickController" index="0"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 381.0
+margin_bottom = 369.0
+
+[node name="Start" type="MarginContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Backgroud" type="ColorRect" parent="Start"]
+margin_right = 800.0
+margin_bottom = 600.0
+color = Color( 0.917647, 0.917647, 0.890196, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="Start"]
+margin_right = 800.0
+margin_bottom = 600.0
+
+[node name="WaitAnimation" parent="Start/CenterContainer" instance=ExtResource( 4 )]
+visible = false
+margin_left = 135.0
+margin_top = 225.0
+margin_right = 665.0
+margin_bottom = 375.0
+speed = 150
+
+[node name="Welcome" type="VBoxContainer" parent="Start/CenterContainer"]
+margin_left = 211.0
+margin_top = 268.0
+margin_right = 588.0
+margin_bottom = 331.0
+
+[node name="Manual" type="Label" parent="Start/CenterContainer/Welcome"]
+margin_right = 377.0
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Please connect your drone via wifi
+after this, hit that button"
+align = 1
+valign = 1
+
+[node name="start" type="Button" parent="Start/CenterContainer/Welcome"]
+margin_top = 43.0
+margin_right = 377.0
+margin_bottom = 63.0
+text = "Connect"
+[connection signal="command_send" from="Tello" to="." method="_on_Tello_command_send"]
+[connection signal="recived_control_code" from="Tello" to="." method="_on_Tello_recived_control_code"]
+[connection signal="recived_telemery_bat" from="Tello" to="Header" method="update_bat"]
+[connection signal="recived_telemery_h" from="Tello" to="Header" method="update_hight"]
+[connection signal="recived_telemery_pitch" from="Tello" to="Header" method="update_pitch"]
+[connection signal="recived_telemery_roll" from="Tello" to="Header" method="update_roll"]
+[connection signal="recived_telemery_temph" from="Tello" to="Header" method="update_temph"]
+[connection signal="recived_telemery_templ" from="Tello" to="Header" method="update_templ"]
+[connection signal="recived_telemery_time" from="Tello" to="Header" method="update_time"]
+[connection signal="recived_telemery_tof" from="Tello" to="Header" method="update_hight_tof"]
+[connection signal="recived_telemery_yaw" from="Tello" to="Header" method="update_yaw"]
+[connection signal="pressed" from="DebugStuff/Box/Box/HBoxContainer/Send" to="." method="_on_Send_pressed"]
+[connection signal="toggled" from="DebugStuff/Box/Box/RC" to="." method="update_rc_mode"]
+[connection signal="toggled" from="DebugStuff/Box/CheckBox" to="." method="_on_CheckBox_toggled"]
+[connection signal="angle_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_angle_changed"]
+[connection signal="distance_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_distance_changed"]
+[connection signal="speed_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_speed_changed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround1/TurnLeft" to="." method="_on_TurnLeft_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/Up" to="." method="_on_Up_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/TurnRight" to="." method="_on_TurnRight_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround2/ForwardLeft" to="." method="_on_ForwardLeft_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/Forward" to="." method="_on_Forward_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/ForwardRight" to="." method="_on_ForwardRight_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround3/Left" to="." method="_on_Left_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/EmergencyOff" to="." method="_on_EmergencyOff_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround4/Right" to="." method="_on_Right_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround5/BackwardLeft" to="." method="_on_BackwardLeft_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround6/Backward" to="." method="_on_Backward_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround7/BackwardRight" to="." method="_on_BackwardRight_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/Liftoff" to="." method="_on_Liftoff_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround8/Down" to="." method="_on_Down_pressed"]
+[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/Land" to="." method="_on_Land_pressed"]
+[connection signal="pressed" from="Start/CenterContainer/Welcome/start" to="." method="_on_start_pressed"]
+
+[editable path="VBoxContainer/ClickController"]
