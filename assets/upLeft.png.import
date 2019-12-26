@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Btn_XArrow.png-b99c8f548486238938b34c1299ed0758.stex"
+path="res://.import/upLeft.png-8ce913ce230696f09b011acd1889797f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Btn_XArrow.png"
-dest_files=[ "res://.import/Btn_XArrow.png-b99c8f548486238938b34c1299ed0758.stex" ]
+source_file="res://assets/upLeft.png"
+dest_files=[ "res://.import/upLeft.png-8ce913ce230696f09b011acd1889797f.stex" ]
 
 [params]
 

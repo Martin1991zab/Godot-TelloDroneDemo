@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Btn_Yaw_Arrow.png-f771e631fc62fb4b773c8d882a95b637.stex"
+path="res://.import/arrowLeft.png-2af13bb6287720336daf7ca3ec59e958.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Btn_Yaw_Arrow.png"
-dest_files=[ "res://.import/Btn_Yaw_Arrow.png-f771e631fc62fb4b773c8d882a95b637.stex" ]
+source_file="res://assets/arrowLeft.png"
+dest_files=[ "res://.import/arrowLeft.png-2af13bb6287720336daf7ca3ec59e958.stex" ]
 
 [params]
 

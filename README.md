@@ -10,5 +10,5 @@ You can find the API documentation [here](https://www.ryzerobotics.com/de/tello/
 [Here](https://github.com/Martin1991zab/Godot-TelloDroneNode) you can find my project for the control node.
 
 
-![Screenshot of the UI](https://raw.githubusercontent.com/Martin1991zab/Godot-TelloDroneDemo/master/screenshots/ui_in_flight.png "UI Screenshot")
+![Screenshot of the UI](https://raw.githubusercontent.com/Martin1991zab/Godot-TelloDroneDemo/master/screenshots/ui.png "UI Screenshot")
 

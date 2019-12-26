@@ -311,14 +311,14 @@ __meta__ = {
 
 [node name="Nothing" type="MarginContainer" parent="VBoxContainer"]
 margin_right = 386.0
-margin_bottom = 222.0
+margin_bottom = 292.0
 size_flags_vertical = 3
 
 [node name="ClickController" parent="VBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 226.0
-margin_right = 386.0
+margin_top = 296.0
+margin_right = 344.0
 margin_bottom = 600.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -330,8 +330,8 @@ custom_constants/margin_bottom = 5
 [node name="VBoxContainer" parent="VBoxContainer/ClickController" index="0"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 381.0
-margin_bottom = 369.0
+margin_right = 339.0
+margin_bottom = 299.0
 
 [node name="Start" type="MarginContainer" parent="."]
 visible = false
@@ -400,20 +400,12 @@ text = "Connect"
 [connection signal="angle_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_angle_changed"]
 [connection signal="distance_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_distance_changed"]
 [connection signal="speed_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_speed_changed"]
-[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround1/TurnLeft" to="." method="_on_TurnLeft_pressed"]
 [connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/TurnRight" to="." method="_on_TurnRight_pressed"]
-[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround2/ForwardLeft" to="." method="_on_ForwardLeft_pressed"]
 [connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/Forward" to="." method="_on_Forward_pressed"]
 [connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/ForwardRight" to="." method="_on_ForwardRight_pressed"]
-[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround3/Left" to="." method="_on_Left_pressed"]
 [connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/EmergencyOff" to="." method="_on_EmergencyOff_pressed"]
-[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround4/Right" to="." method="_on_Right_pressed"]
-[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround5/BackwardLeft" to="." method="_on_BackwardLeft_pressed"]
-[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround6/Backward" to="." method="_on_Backward_pressed"]
-[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround7/BackwardRight" to="." method="_on_BackwardRight_pressed"]
 [connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/Liftoff" to="." method="_on_Liftoff_pressed"]
-[connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/workaround8/Down" to="." method="_on_Down_pressed"]
 [connection signal="pressed" from="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/Control/Land" to="." method="_on_Land_pressed"]
 [connection signal="pressed" from="Start/CenterContainer/Welcome/start" to="." method="_on_start_pressed"]
 
