@@ -1,31 +1,8 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://assets/drone.png" type="Texture" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
-
-[sub_resource type="GDScript" id=2]
-script/source = "extends MarginContainer
-
-
-export(int) var speed := 300
-export(bool) var play := false setget set_play
-
-
-onready var follower := $Path2D/follower as PathFollow2D
-
-
-func _ready() -> void:
-    set_physics_process(play)
-
-
-func _physics_process(delta: float) -> void:
-    follower.set_offset(follower.get_offset() + speed * delta)
-
-
-func set_play(val: bool) -> void:
-    set_physics_process(val)
-    play = val
-"
+[ext_resource path="res://Scripts/WaitAnimation.gd" type="Script" id=1]
+[ext_resource path="res://assets/drone.png" type="Texture" id=2]
+[ext_resource path="res://icon.png" type="Texture" id=3]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -36,7 +13,7 @@ _data = {
 margin_right = 530.0
 margin_bottom = 150.0
 rect_min_size = Vector2( 530, 150 )
-script = SubResource( 2 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -47,21 +24,21 @@ curve = SubResource( 1 )
 
 [node name="follower" type="PathFollow2D" parent="Path2D"]
 position = Vector2( 208.401, 180.64 )
-rotation = -0.312938
+rotation = -0.312949
 
 [node name="Sprite" type="Sprite" parent="Path2D/follower"]
 rotation = 1.5708
 scale = Vector2( 0.4, 0.4 )
-texture = ExtResource( 1 )
+texture = ExtResource( 2 )
 
 [node name="drone" type="Sprite" parent="."]
 position = Vector2( 465.471, 65.6398 )
-texture = ExtResource( 1 )
+texture = ExtResource( 2 )
 
 [node name="icon" type="Sprite" parent="."]
 position = Vector2( 64.9994, 64 )
 scale = Vector2( 2, 2 )
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 530.0

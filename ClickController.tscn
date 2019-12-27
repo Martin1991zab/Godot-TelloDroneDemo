@@ -1,66 +1,28 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://assets/backward.png" type="Texture" id=1]
-[ext_resource path="res://assets/arrowLeft.png" type="Texture" id=2]
-[ext_resource path="res://assets/upLeft.png" type="Texture" id=3]
-[ext_resource path="res://assets/arrowDown.png" type="Texture" id=4]
-[ext_resource path="res://assets/arrowUp.png" type="Texture" id=5]
-[ext_resource path="res://assets/downRight.png" type="Texture" id=6]
-[ext_resource path="res://assets/up.png" type="Texture" id=7]
-[ext_resource path="res://assets/export.png" type="Texture" id=8]
-[ext_resource path="res://assets/down.png" type="Texture" id=9]
-[ext_resource path="res://assets/import.png" type="Texture" id=10]
-[ext_resource path="res://assets/arrowRight.png" type="Texture" id=11]
-[ext_resource path="res://assets/power.png" type="Texture" id=12]
-[ext_resource path="res://assets/upRight.png" type="Texture" id=13]
-[ext_resource path="res://assets/forward.png" type="Texture" id=14]
-[ext_resource path="res://assets/downLeft.png" type="Texture" id=15]
-
-[sub_resource type="GDScript" id=1]
-script/source = "extends MarginContainer
-
-
-signal speed_changed(val)
-signal distance_changed(val)
-signal angle_changed(val)
-
-
-func _on_SpeedValTxt_value_changed(value: int) -> void:
-    ($VBoxContainer/HBoxContainer/SpeedControl/VBoxContainer/SpeedSlider as VSlider).value = value
-    emit_signal(\"speed_changed\", value)
-
-
-func _on_SpeedSlider_value_changed(value: int) -> void:
-    ($VBoxContainer/HBoxContainer/SpeedControl/VBoxContainer/SpeedValTxt as SpinBox).value = value
-    emit_signal(\"speed_changed\", value)
-
-
-func _on_DistanceSlider_value_changed(value: int) -> void:
-    ($VBoxContainer/HBoxContainer/DistanceControl/VBoxContainer2/DistanceValTxt as SpinBox).value = value
-    emit_signal(\"distance_changed\", value)
-
-
-func _on_DistanceValTxt_value_changed(value: int) -> void:
-    ($VBoxContainer/HBoxContainer/DistanceControl/VBoxContainer2/DistanceSlider as VSlider).value = value
-    emit_signal(\"distance_changed\", value)
-
-
-func _on_AngleValTxt_value_changed(value: int) -> void:
-    ($VBoxContainer/HBoxContainer2/AngleSlider as Slider).value = value
-    emit_signal(\"angle_changed\", value)
-
-
-func _on_AngleSlider_value_changed(value: int) -> void:
-    ($VBoxContainer/HBoxContainer2/AngleValTxt as SpinBox).value = value
-    emit_signal(\"angle_changed\", value)
-"
+[ext_resource path="res://Scripts/ClickController.gd" type="Script" id=1]
+[ext_resource path="res://assets/backward.png" type="Texture" id=2]
+[ext_resource path="res://assets/up.png" type="Texture" id=3]
+[ext_resource path="res://assets/forward.png" type="Texture" id=4]
+[ext_resource path="res://assets/upLeft.png" type="Texture" id=5]
+[ext_resource path="res://assets/arrowUp.png" type="Texture" id=6]
+[ext_resource path="res://assets/upRight.png" type="Texture" id=7]
+[ext_resource path="res://assets/arrowLeft.png" type="Texture" id=8]
+[ext_resource path="res://assets/power.png" type="Texture" id=9]
+[ext_resource path="res://assets/arrowRight.png" type="Texture" id=10]
+[ext_resource path="res://assets/downLeft.png" type="Texture" id=11]
+[ext_resource path="res://assets/arrowDown.png" type="Texture" id=12]
+[ext_resource path="res://assets/downRight.png" type="Texture" id=13]
+[ext_resource path="res://assets/export.png" type="Texture" id=14]
+[ext_resource path="res://assets/down.png" type="Texture" id=15]
+[ext_resource path="res://assets/import.png" type="Texture" id=16]
 
 [node name="ClickController" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -466.0
 margin_bottom = -261.0
-script = SubResource( 1 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -88,6 +50,7 @@ size_flags_vertical = 1
 min_value = 1.0
 max_value = 3600.0
 value = 1.0
+ticks_on_borders = false
 
 [node name="AngleValTxt" type="SpinBox" parent="VBoxContainer/HBoxContainer2"]
 margin_left = 260.0
@@ -153,7 +116,7 @@ __meta__ = {
 [node name="TurnLeft" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
 margin_right = 50.0
 margin_bottom = 50.0
-texture_normal = ExtResource( 1 )
+texture_normal = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -162,20 +125,20 @@ __meta__ = {
 margin_left = 54.0
 margin_right = 104.0
 margin_bottom = 50.0
-texture_normal = ExtResource( 7 )
+texture_normal = ExtResource( 3 )
 
 [node name="TurnRight" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
 margin_left = 108.0
 margin_right = 158.0
 margin_bottom = 50.0
-texture_normal = ExtResource( 14 )
+texture_normal = ExtResource( 4 )
 
 [node name="ForwardLeft" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
 margin_top = 54.0
 margin_right = 50.0
 margin_bottom = 104.0
 rect_pivot_offset = Vector2( 32, 32 )
-texture_normal = ExtResource( 3 )
+texture_normal = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -185,21 +148,21 @@ margin_left = 54.0
 margin_top = 54.0
 margin_right = 104.0
 margin_bottom = 104.0
-texture_normal = ExtResource( 5 )
+texture_normal = ExtResource( 6 )
 
 [node name="ForwardRight" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
 margin_left = 108.0
 margin_top = 54.0
 margin_right = 158.0
 margin_bottom = 104.0
-texture_normal = ExtResource( 13 )
+texture_normal = ExtResource( 7 )
 
 [node name="Left" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
 margin_top = 108.0
 margin_right = 50.0
 margin_bottom = 158.0
 rect_pivot_offset = Vector2( 32, 32 )
-texture_normal = ExtResource( 2 )
+texture_normal = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -209,7 +172,7 @@ margin_left = 54.0
 margin_top = 108.0
 margin_right = 104.0
 margin_bottom = 158.0
-texture_normal = ExtResource( 12 )
+texture_normal = ExtResource( 9 )
 
 [node name="Right" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
 margin_left = 108.0
@@ -217,7 +180,7 @@ margin_top = 108.0
 margin_right = 158.0
 margin_bottom = 158.0
 rect_pivot_offset = Vector2( 32, 32 )
-texture_normal = ExtResource( 11 )
+texture_normal = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -227,7 +190,7 @@ margin_top = 162.0
 margin_right = 50.0
 margin_bottom = 212.0
 rect_pivot_offset = Vector2( 32, 32 )
-texture_normal = ExtResource( 15 )
+texture_normal = ExtResource( 11 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -238,7 +201,7 @@ margin_top = 162.0
 margin_right = 104.0
 margin_bottom = 212.0
 rect_pivot_offset = Vector2( 32, 32 )
-texture_normal = ExtResource( 4 )
+texture_normal = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -249,7 +212,7 @@ margin_top = 162.0
 margin_right = 158.0
 margin_bottom = 212.0
 rect_pivot_offset = Vector2( 32, 32 )
-texture_normal = ExtResource( 6 )
+texture_normal = ExtResource( 13 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -258,7 +221,7 @@ __meta__ = {
 margin_top = 216.0
 margin_right = 50.0
 margin_bottom = 266.0
-texture_normal = ExtResource( 8 )
+texture_normal = ExtResource( 14 )
 
 [node name="Down" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
 margin_left = 54.0
@@ -266,7 +229,7 @@ margin_top = 216.0
 margin_right = 104.0
 margin_bottom = 266.0
 rect_pivot_offset = Vector2( 32, 32 )
-texture_normal = ExtResource( 9 )
+texture_normal = ExtResource( 15 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -276,7 +239,7 @@ margin_left = 108.0
 margin_top = 216.0
 margin_right = 158.0
 margin_bottom = 266.0
-texture_normal = ExtResource( 10 )
+texture_normal = ExtResource( 16 )
 
 [node name="DistanceControl" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
 margin_left = 250.0
@@ -309,6 +272,7 @@ min_value = 20.0
 max_value = 500.0
 value = 20.0
 tick_count = 1
+ticks_on_borders = false
 
 [node name="DistanceValTxt" type="SpinBox" parent="VBoxContainer/HBoxContainer/DistanceControl/VBoxContainer2"]
 margin_top = 232.0

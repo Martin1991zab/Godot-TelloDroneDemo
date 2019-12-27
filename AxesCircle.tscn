@@ -1,32 +1,16 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://assets/drone.png" type="Texture" id=1]
-
-[sub_resource type="GDScript" id=2]
-script/source = "extends Node2D
-
-export(int) var yaw: int = 0 setget set_yaw
-export(int) var roll: int = 0 setget set_roll
-export(int) var pitch: int = 0 setget set_pitch
-
-func set_yaw(val: int) -> void:
-    ($Yaw as Sprite).rotation_degrees = val
-
-func set_roll(val: int) -> void:
-    ($Roll as HSlider).value = val
-
-func set_pitch(val: int) -> void:
-    ($Pitch as VSlider).value = val
-"
+[ext_resource path="res://Scripts/AxesCircle.gd" type="Script" id=1]
+[ext_resource path="res://assets/drone.png" type="Texture" id=2]
 
 [node name="AxesCircle" type="Node2D"]
-script = SubResource( 2 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="Yaw" type="Sprite" parent="."]
-texture = ExtResource( 1 )
+texture = ExtResource( 2 )
 
 [node name="Polygon2D" type="Polygon2D" parent="Yaw"]
 position = Vector2( 0, -60 )
@@ -41,6 +25,7 @@ margin_right = 64.0
 margin_bottom = -74.0
 min_value = -180.0
 max_value = 180.0
+ticks_on_borders = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -53,6 +38,7 @@ margin_bottom = 192.0
 rect_rotation = 180.0
 min_value = -90.0
 max_value = 90.0
+ticks_on_borders = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
