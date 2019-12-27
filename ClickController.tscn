@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scripts/ClickController.gd" type="Script" id=1]
 [ext_resource path="res://assets/backward.png" type="Texture" id=2]
@@ -16,6 +16,11 @@
 [ext_resource path="res://assets/export.png" type="Texture" id=14]
 [ext_resource path="res://assets/down.png" type="Texture" id=15]
 [ext_resource path="res://assets/import.png" type="Texture" id=16]
+
+[sub_resource type="Animation" id=1]
+resource_name = "up"
+length = 0.6
+loop = true
 
 [node name="ClickController" type="MarginContainer"]
 anchor_right = 1.0
@@ -50,7 +55,6 @@ size_flags_vertical = 1
 min_value = 1.0
 max_value = 3600.0
 value = 1.0
-ticks_on_borders = false
 
 [node name="AngleValTxt" type="SpinBox" parent="VBoxContainer/HBoxContainer2"]
 margin_left = 260.0
@@ -168,6 +172,7 @@ __meta__ = {
 }
 
 [node name="EmergencyOff" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
+modulate = Color( 1, 0, 0, 1 )
 margin_left = 54.0
 margin_top = 108.0
 margin_right = 104.0
@@ -218,6 +223,7 @@ __meta__ = {
 }
 
 [node name="Liftoff" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
+modulate = Color( 0, 1, 0, 1 )
 margin_top = 216.0
 margin_right = 50.0
 margin_bottom = 266.0
@@ -235,6 +241,7 @@ __meta__ = {
 }
 
 [node name="Land" type="TextureButton" parent="VBoxContainer/HBoxContainer/Control"]
+modulate = Color( 0, 0, 1, 1 )
 margin_left = 108.0
 margin_top = 216.0
 margin_right = 158.0
@@ -272,7 +279,6 @@ min_value = 20.0
 max_value = 500.0
 value = 20.0
 tick_count = 1
-ticks_on_borders = false
 
 [node name="DistanceValTxt" type="SpinBox" parent="VBoxContainer/HBoxContainer/DistanceControl/VBoxContainer2"]
 margin_top = 232.0
@@ -281,6 +287,9 @@ margin_bottom = 256.0
 min_value = 20.0
 max_value = 500.0
 value = 20.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/up = SubResource( 1 )
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer2/AngleSlider" to="." method="_on_AngleSlider_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer2/AngleValTxt" to="." method="_on_AngleValTxt_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/SpeedControl/VBoxContainer/SpeedSlider" to="." method="_on_SpeedSlider_value_changed"]
