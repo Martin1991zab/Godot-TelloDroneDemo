@@ -137,9 +137,6 @@ margin_top = 5.0
 margin_right = 339.0
 margin_bottom = 299.0
 
-[node name="SpeedSlider" parent="VBoxContainer/ClickController/VBoxContainer/HBoxContainer/SpeedControl/VBoxContainer" index="1"]
-ticks_on_borders = false
-
 [node name="Start" type="MarginContainer" parent="."]
 visible = false
 anchor_right = 1.0
