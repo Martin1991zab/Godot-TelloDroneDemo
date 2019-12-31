@@ -36,7 +36,7 @@ __meta__ = {
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 205.0
-margin_bottom = 95.0
+margin_bottom = 98.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
@@ -44,7 +44,7 @@ __meta__ = {
 
 [node name="Box" type="VBoxContainer" parent="DebugStuff/Box"]
 margin_right = 172.0
-margin_bottom = 90.0
+margin_bottom = 93.0
 size_flags_horizontal = 3
 custom_constants/separation = 6
 __meta__ = {
@@ -87,11 +87,26 @@ margin_right = 172.0
 margin_bottom = 90.0
 text = "RC Mode"
 
-[node name="CheckBox" type="CheckBox" parent="DebugStuff/Box"]
+[node name="Openbox" type="VBoxContainer" parent="DebugStuff/Box"]
 margin_left = 176.0
-margin_top = 66.0
 margin_right = 200.0
-margin_bottom = 90.0
+margin_bottom = 93.0
+
+[node name="Label" type="Label" parent="DebugStuff/Box/Openbox"]
+margin_right = 24.0
+margin_bottom = 65.0
+text = "M
+o
+r
+e"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="CheckBox" type="CheckBox" parent="DebugStuff/Box/Openbox"]
+margin_top = 69.0
+margin_right = 24.0
+margin_bottom = 93.0
 size_flags_horizontal = 0
 size_flags_vertical = 8
 align = 2
@@ -200,7 +215,7 @@ text = "Connect"
 [connection signal="recived_telemery_yaw" from="Tello" to="Header" method="update_yaw"]
 [connection signal="pressed" from="DebugStuff/Box/Box/HBoxContainer/Send" to="." method="_on_Send_pressed"]
 [connection signal="toggled" from="DebugStuff/Box/Box/RC" to="." method="update_rc_mode"]
-[connection signal="toggled" from="DebugStuff/Box/CheckBox" to="." method="_on_CheckBox_toggled"]
+[connection signal="toggled" from="DebugStuff/Box/Openbox/CheckBox" to="." method="_on_CheckBox_toggled"]
 [connection signal="angle_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_angle_changed"]
 [connection signal="distance_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_distance_changed"]
 [connection signal="speed_changed" from="VBoxContainer/ClickController" to="." method="_on_ClickController_speed_changed"]
