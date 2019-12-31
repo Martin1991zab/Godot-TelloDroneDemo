@@ -25,6 +25,10 @@ run/main_scene="res://Main.tscn"
 run/low_processor_mode=true
 config/icon="res://icon.png"
 
+[autoload]
+
+NaiveGBScriptProfiler="*res://NaiveGDScriptProfiler.gd"
+
 [display]
 
 window/size/width=800
